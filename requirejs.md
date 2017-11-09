@@ -39,23 +39,25 @@ var moduleB = (function($){
 <span style="color:#606060;padding-left:0px;font-size:16px;">RequireJS是一款遵循AMD规范协议的JavaScript模拟加载器.</span>
 特点：异步加载、模块化、依赖管理.</br>
 requirejs 源码2150行，去掉注释大概1200多行。但是这写代码运行起来的时候会随着依赖关系的复杂程度远远超过1200行。原因是因为它会存在大量检查依赖看似递归调用的函数执行。
-我从自己写的一个简单requirejs调用来窥探内部代码的调用流程。</br>
-```js
+我从自己写的一个简单requirejs调用来窥探内部代码的调用流程。
+```javascript
 <script src="js/require.js" data-main="main"></script>
 ```
     这是requirejs的入口文件，加载完requirejs后执行代码 一共两处调用，下面是第一次初始化调用：
 ![1](http://owznda5oi.bkt.clouddn.com/markdown-img-paste-20171101145442850.png)
-```js
+
+```javascript
 var requirejs, require, define;
 ```
     这是requirejs定义的三个全局变量，然后定义一个立即执行函数对这三个变量进行赋值。
-```js
+
+```javascript
 (function (global, setTimeout) {})(this, (typeof setTimeout === 'undefined' ? undefined : setTimeout)))
 ```
     浏览器环境里面this自然指向了window对象。
 req({});这是require的入口函数，在此之前所有的代码几乎都是函数以及变量的定义。
 
-```js
+```javascript
  Determine if have config object in the call.
       if (!isArray(deps) && typeof deps !== 'string') {
           // deps is a config object
